@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(NAME picovision-boilerplate)  # TODO: Change me!
+set(NAME picovision-mp3)  # TODO: Change me!
 
 include(pimoroni_pico_import.cmake)
 include(pico_sdk_import.cmake)
@@ -26,24 +26,38 @@ include(common/pimoroni_bus)
 include(libraries/jpegdec/jpegdec)
 include(libraries/pico_graphics/pico_graphics)
 
-# SD Card Access
-include(drivers/fatfs/fatfs)
-include(drivers/sdcard/sdcard)
+add_subdirectory(no-OS-FatFS-SD-SDIO-SPI-RPi-Pico/src)
+add_subdirectory(picomp3lib/src)
 
 # Add your source files
 add_executable(${NAME}
     main.cpp # TODO: Add source files here!
+    picow_bt_example_common.c
+    a2dp_source_demo.c
+    picomp3lib/interface/music_file.c
+    fixed_fft.cpp
 )
+
+# Increase CLKDIV to 4, because we're going to run the system at 320 MHz, and
+# the flash gets rather unhappy running that fast
+pico_clone_default_boot_stage2(custom_boot2)
+target_compile_definitions(custom_boot2 PRIVATE PICO_FLASH_SPI_CLKDIV=4)
+pico_set_boot_stage2(${NAME} custom_boot2)
 
 # TODO: Don't forget to link the libraries you need!
 target_link_libraries(${NAME}
 pico_stdlib
     picovision
     pico_graphics
-    jpegdec
     pimoroni_i2c
-    fatfs
-    sdcard
+    pico_multicore
+    no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
+    pico_btstack_ble
+    pico_btstack_classic
+    pico_btstack_cyw43
+    pico_cyw43_arch_threadsafe_background
+    pico_btstack_sbc_encoder
+    picomp3lib
 )
 
 target_include_directories(${NAME} PRIVATE
@@ -57,13 +71,20 @@ target_compile_definitions(${NAME} PRIVATE
     SDCARD_PIN_SPI0_SCK=10
     SDCARD_PIN_SPI0_MOSI=11
     SDCARD_PIN_SPI0_MISO=12
+    CYW43_LWIP=0
+    CYW43_PIO_CLOCK_DIV_INT=5
+    CYW43_SPI_PROGRAM_NAME=spi_gap0_sample1
 )
+
+target_include_directories(${NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/config
+    )
 
 # create map/bin/hex file etc.
 pico_add_extra_outputs(${NAME})
 
-pico_enable_stdio_uart(${NAME} 1)
-pico_enable_stdio_usb(${NAME} 0)
+pico_enable_stdio_uart(${NAME} 0)
+pico_enable_stdio_usb(${NAME} 1)
 
 target_link_options(${NAME} PRIVATE
     -Wl,--print-memory-usage
