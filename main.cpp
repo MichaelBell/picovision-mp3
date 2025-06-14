@@ -278,7 +278,7 @@ int main() {
         need_update = false;
         const int max_y = SAMPLE_Y + SAMPLE_HEIGHT;
         for (int i = 0, x = SAMPLE_X; i < DISPLAY_SAMPLES; ++i, x += SAMPLE_WIDTH) {
-            for (int y = display_samples[i] - 1; y >= 0; --y) {
+            for (int y = std::min(display_samples[i] - 1, max_y); y >= 0; --y) {
                 graphics.set_pen(0, 0, 80 + (y >> 1));
                 graphics.set_pixel_span(Point(x, max_y - y), SAMPLE_WIDTH);
             }
