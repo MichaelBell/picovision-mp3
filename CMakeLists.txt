@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.12)
 
 set(NAME picovision-mp3)  # TODO: Change me!
 
+include(picovision_import.cmake)
+
+set(PICO_BOARD "picovision")
+set(PICO_BOARD_HEADER_DIRS ${PIMORONI_PICOVISION_PATH}/boards/picovision)
+
 include(pimoroni_pico_import.cmake)
 include(pico_sdk_import.cmake)
 
@@ -13,10 +18,10 @@ set(CMAKE_CXX_STANDARD 17)
 # Initialize the SDK
 pico_sdk_init()
 
-include(picovision_import.cmake)
-
 # Include required libraries
 # This assumes `pimoroni-pico` is stored alongside your project
+include(picovision)
+include_directories(${PIMORONI_PICO_PATH}/libraries/pico_graphics)
 
 # I2C and SPI
 include(common/pimoroni_i2c)

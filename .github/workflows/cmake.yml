@@ -47,8 +47,9 @@ jobs:
     - name: Checkout Pimoroni PicoVision Libraries
       uses: actions/checkout@v2
       with:
-        repository: pimoroni/picovision
+        repository: MichaelBell/picovision
         path: picovision
+        ref: picovector2
 
     # Checkout the Pico SDK
     - name: Checkout Pico SDK

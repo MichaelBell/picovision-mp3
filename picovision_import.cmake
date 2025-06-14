@@ -26,6 +26,3 @@ set(PIMORONI_PICOVISION_PATH ${PIMORONI_PICOVISION_PATH} CACHE PATH "Path to the
 
 include_directories(${PIMORONI_PICOVISION_PATH})
 list(APPEND CMAKE_MODULE_PATH ${PIMORONI_PICOVISION_PATH})
-
-include(picovision)
-include_directories(${PIMORONI_PICO_PATH}/libraries/pico_graphics)
