@@ -40,9 +40,9 @@ add_executable(${NAME}
 
 # Increase CLKDIV to 4, because we're going to run the system at 320 MHz, and
 # the flash gets rather unhappy running that fast
-pico_clone_default_boot_stage2(custom_boot2)
-target_compile_definitions(custom_boot2 PRIVATE PICO_FLASH_SPI_CLKDIV=4)
-pico_set_boot_stage2(${NAME} custom_boot2)
+#pico_clone_default_boot_stage2(custom_boot2)
+#target_compile_definitions(custom_boot2 PRIVATE PICO_FLASH_SPI_CLKDIV=4)
+#pico_set_boot_stage2(${NAME} custom_boot2)
 
 # TODO: Don't forget to link the libraries you need!
 target_link_libraries(${NAME}
@@ -72,7 +72,7 @@ target_compile_definitions(${NAME} PRIVATE
     SDCARD_PIN_SPI0_MOSI=11
     SDCARD_PIN_SPI0_MISO=12
     CYW43_LWIP=0
-    CYW43_PIO_CLOCK_DIV_INT=5
+    CYW43_PIO_CLOCK_DIV_INT=4
     CYW43_SPI_PROGRAM_NAME=spi_gap0_sample1
 )
 

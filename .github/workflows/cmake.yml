@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-24.04
             name: Linux
             cache-key: linux
             cmake-args: '-DPIMORONI_PICOVISION_PATH=$GITHUB_WORKSPACE/picovision -DPIMORONI_PICO_PATH=$GITHUB_WORKSPACE/pimoroni-pico -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install'
@@ -34,6 +34,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: project
+        submodules: true
 
     # Checkout the Pimoroni Pico Libraries
     - name: Checkout Pimoroni Pico Libraries
@@ -76,6 +77,12 @@ jobs:
       shell: bash
       run: |
         cmake --build . --config $BUILD_TYPE -j 2
+
+    - name: "Artifacts: Upload .uf2"
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{github.event.repository.name}}.uf2
+        path: ${{runner.workspace}}/build/*.uf2
 
     - name: Build Release Packages
       if: github.event_name == 'release'

@@ -43,7 +43,7 @@ static sd_sdio_if_t sdio_if = {
     */
     .CMD_gpio = SDCARD_PIN_SPI0_MOSI,
     .D0_gpio = SDCARD_PIN_SPI0_MISO,
-    .baud_rate = 320 * 1000 * 1000 / 8
+    .baud_rate = 266 * 1000 * 1000 / 6
 };
 
 /* Hardware Configuration of the SD Card socket "object" */
@@ -236,7 +236,7 @@ Pen WHITE = graphics.create_pen(255, 255, 255);
 int main() {
     vreg_set_voltage(VREG_VOLTAGE_1_20);
     sleep_ms(10);
-    set_sys_clock_khz(320000, true);
+    set_sys_clock_khz(266000, true);
     stdio_init_all();
 
     sleep_ms(5000);
